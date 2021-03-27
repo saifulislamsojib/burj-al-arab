@@ -18,6 +18,15 @@ const setUserName = name => {
     });
 }
 
+export const getTokenId = () => {
+    return firebase.auth().currentUser.getIdToken(true)
+    .then(idToken => {
+        return idToken;
+      }).catch(error => {
+        return error;
+      });
+}
+
 const setUser = res => {
     const {email, displayName, photoURL} = res.user;
     const newUser = {

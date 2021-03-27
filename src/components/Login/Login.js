@@ -2,7 +2,7 @@ import GTranslateIcon from '@material-ui/icons/GTranslate';
 import React, { useContext, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { userContext } from '../../App';
-import { googleSignIn } from './authManager';
+import { getTokenId, googleSignIn } from './authManager';
 import './Login.css';
 
 const Login = () => {
@@ -16,10 +16,18 @@ const Login = () => {
 
     const { from } = location.state || { from: { pathname: "/" } };
 
+    const getToken = () => {
+        getTokenId()
+        .then(idToken=>{
+            sessionStorage.setItem('userToken', idToken);
+            history.replace(from);
+        })
+    }
+
     const updateState = res => {
         if (res.email) {
             setUser(res);
-            history.replace(from);
+            getToken();
         }
         else{
             setLoginError(res.message);
